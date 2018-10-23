@@ -63,48 +63,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .formLogin().loginPage("/login_p").loginProcessingUrl("/login")
         .usernameParameter("username").passwordParameter("password")
-        .failureHandler(new AuthenticationFailureHandler() {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest req,
-                                HttpServletResponse resp,
-                                AuthenticationException e) throws IOException {
-                resp.setContentType("application/json;charset=utf-8");
-                RespBean respBean = null;
-                if (e instanceof BadCredentialsException ||
-                        e instanceof UsernameNotFoundException) {
-                    respBean = RespBean.error("账户名或者密码输入错误!");
-                } else if (e instanceof LockedException) {
-                    respBean = RespBean.error("账户被锁定，请联系管理员!");
-                } else if (e instanceof CredentialsExpiredException) {
-                    respBean = RespBean.error("密码过期，请联系管理员!");
-                } else if (e instanceof AccountExpiredException) {
-                    respBean = RespBean.error("账户过期，请联系管理员!");
-                } else if (e instanceof DisabledException) {
-                    respBean = RespBean.error("账户被禁用，请联系管理员!");
-                } else {
-                    respBean = RespBean.error("登录失败!");
-                }
-                resp.setStatus(401);
-                ObjectMapper om = new ObjectMapper();
-                PrintWriter out = resp.getWriter();
-                out.write(om.writeValueAsString(respBean));
-                out.flush();
-                out.close();
-            }
-        })
-        .successHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest req,
-                                    HttpServletResponse resp,
-                                    Authentication auth) throws IOException {
+        .failureHandler((req, resp, e) -> {
             resp.setContentType("application/json;charset=utf-8");
-            RespBean respBean = RespBean.ok("登录成功!", HrUtils.getCurrentHr());
+            RespBean respBean = null;
+            if (e instanceof BadCredentialsException ||
+                    e instanceof UsernameNotFoundException) {
+                respBean = RespBean.error("账户名或者密码输入错误!");
+            } else if (e instanceof LockedException) {
+                respBean = RespBean.error("账户被锁定，请联系管理员!");
+            } else if (e instanceof CredentialsExpiredException) {
+                respBean = RespBean.error("密码过期，请联系管理员!");
+            } else if (e instanceof AccountExpiredException) {
+                respBean = RespBean.error("账户过期，请联系管理员!");
+            } else if (e instanceof DisabledException) {
+                respBean = RespBean.error("账户被禁用，请联系管理员!");
+            } else {
+                respBean = RespBean.error("登录失败!");
+            }
+            resp.setStatus(401);
             ObjectMapper om = new ObjectMapper();
             PrintWriter out = resp.getWriter();
             out.write(om.writeValueAsString(respBean));
             out.flush();
             out.close();
-            }
+        })
+        .successHandler((req, resp, auth) -> {
+        resp.setContentType("application/json;charset=utf-8");
+        RespBean respBean = RespBean.ok("登录成功!", HrUtils.getCurrentHr());
+        ObjectMapper om = new ObjectMapper();
+        PrintWriter out = resp.getWriter();
+        out.write(om.writeValueAsString(respBean));
+        out.flush();
+        out.close();
         })
         .permitAll()
         .and()
