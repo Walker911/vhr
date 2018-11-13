@@ -20,7 +20,7 @@ public class WsController {
 
     @MessageMapping("/ws/chat")
     public void handleChat(Principal principal, String msg) {
-        String destUser = msg.substring(msg.lastIndexOf(";") + 1, msg.length());
+        String destUser = msg.substring(msg.lastIndexOf(";") + 1);
         String message = msg.substring(0, msg.lastIndexOf(";"));
         messagingTemplate.convertAndSendToUser(destUser, "/queue/chat", new ChatResp(message, principal.getName()));
     }

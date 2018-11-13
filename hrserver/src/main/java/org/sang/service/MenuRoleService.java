@@ -1,6 +1,5 @@
 package org.sang.service;
 
-import org.apache.ibatis.annotations.Param;
 import org.sang.mapper.MenuRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
