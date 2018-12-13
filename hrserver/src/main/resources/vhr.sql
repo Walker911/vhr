@@ -1,20 +1,18 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : MyCon
-Source Server Version : 50717
+Source Server         : localhost
+Source Server Version : 80013
 Source Host           : localhost:3306
 Source Database       : vhr
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2018-02-05 11:25:15
+Date: 2018-12-13 17:14:25
 */
-CREATE DATABASE `vhr` DEFAULT CHARACTER SET utf8;
 
-USE `vhr`;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -442,7 +440,7 @@ CREATE TABLE `hr` (
   `userface` varchar(255) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of hr
@@ -466,7 +464,7 @@ CREATE TABLE `hr_role` (
   KEY `hr_role_ibfk_1` (`hrid`),
   CONSTRAINT `hr_role_ibfk_1` FOREIGN KEY (`hrid`) REFERENCES `hr` (`id`) ON DELETE CASCADE,
   CONSTRAINT `hr_role_ibfk_2` FOREIGN KEY (`rid`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
 
 -- ----------------------------
 -- Records of hr_role
@@ -527,7 +525,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `parentId` (`parentId`),
   CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`parentId`) REFERENCES `menu` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of menu
@@ -574,7 +572,7 @@ CREATE TABLE `menu_role` (
   KEY `rid` (`rid`),
   CONSTRAINT `menu_role_ibfk_1` FOREIGN KEY (`mid`) REFERENCES `menu` (`id`),
   CONSTRAINT `menu_role_ibfk_2` FOREIGN KEY (`rid`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8 COMMENT='菜单角色关联表';
 
 -- ----------------------------
 -- Records of menu_role
@@ -801,7 +799,7 @@ CREATE TABLE `role` (
   `name` varchar(64) DEFAULT NULL,
   `nameZh` varchar(64) DEFAULT NULL COMMENT '角色名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of role
@@ -933,4 +931,3 @@ begin
 end
 ;;
 DELIMITER ;
-SET FOREIGN_KEY_CHECKS=1;
