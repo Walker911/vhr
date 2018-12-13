@@ -18,18 +18,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/system/basic")
 public class SystemBasicController {
+
+    private final RoleService roleService;
+    private final MenuService menuService;
+    private final MenuRoleService menuRoleService;
+    private final DepartmentService departmentService;
+    private final PositionService positionService;
+    private final JobLevelService jobLevelService;
+
     @Autowired
-    RoleService roleService;
-    @Autowired
-    MenuService menuService;
-    @Autowired
-    MenuRoleService menuRoleService;
-    @Autowired
-    DepartmentService departmentService;
-    @Autowired
-    PositionService positionService;
-    @Autowired
-    JobLevelService jobLevelService;
+    public SystemBasicController(RoleService roleService, MenuService menuService, MenuRoleService menuRoleService, DepartmentService departmentService, PositionService positionService, JobLevelService jobLevelService) {
+        this.roleService = roleService;
+        this.menuService = menuService;
+        this.menuRoleService = menuRoleService;
+        this.departmentService = departmentService;
+        this.positionService = positionService;
+        this.jobLevelService = jobLevelService;
+    }
 
     @RequestMapping(value = "/role/{rid}", method = RequestMethod.DELETE)
     public RespBean deleteRole(@PathVariable Long rid) {

@@ -17,8 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/system/hr")
 public class SystemHrController {
+
+    private final HrService hrService;
+
     @Autowired
-    HrService hrService;
+    public SystemHrController(HrService hrService) {
+        this.hrService = hrService;
+    }
 
     @RequestMapping("/id/{hrId}")
     public Hr getHrById(@PathVariable Long hrId) {

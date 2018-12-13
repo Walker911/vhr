@@ -32,74 +32,89 @@ import java.io.PrintWriter;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final HrService hrService;
+    private final CustomMetadataSource metadataSource;
+    private final UrlAccessDecisionManager urlAccessDecisionManager;
+    private final AuthenticationAccessDeniedHandler deniedHandler;
+
     @Autowired
-    HrService hrService;
-    @Autowired
-    CustomMetadataSource metadataSource;
-    @Autowired
-    UrlAccessDecisionManager urlAccessDecisionManager;
-    @Autowired
-    AuthenticationAccessDeniedHandler deniedHandler;
+    public WebSecurityConfig(HrService hrService, CustomMetadataSource metadataSource, UrlAccessDecisionManager urlAccessDecisionManager, AuthenticationAccessDeniedHandler deniedHandler) {
+        this.hrService = hrService;
+        this.metadataSource = metadataSource;
+        this.urlAccessDecisionManager = urlAccessDecisionManager;
+        this.deniedHandler = deniedHandler;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(hrService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/index.html", "/static/**", "/login_p");
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-            @Override
-            public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                o.setSecurityMetadataSource(metadataSource);
-                o.setAccessDecisionManager(urlAccessDecisionManager);
-                return o;
-            }
-        })
-        .and()
-        .formLogin().loginPage("/login_p").loginProcessingUrl("/login")
-        .usernameParameter("username").passwordParameter("password")
-        .failureHandler((req, resp, e) -> {
-            resp.setContentType("application/json;charset=utf-8");
-            RespBean respBean = null;
-            if (e instanceof BadCredentialsException ||
-                    e instanceof UsernameNotFoundException) {
-                respBean = RespBean.error("账户名或者密码输入错误!");
-            } else if (e instanceof LockedException) {
-                respBean = RespBean.error("账户被锁定，请联系管理员!");
-            } else if (e instanceof CredentialsExpiredException) {
-                respBean = RespBean.error("密码过期，请联系管理员!");
-            } else if (e instanceof AccountExpiredException) {
-                respBean = RespBean.error("账户过期，请联系管理员!");
-            } else if (e instanceof DisabledException) {
-                respBean = RespBean.error("账户被禁用，请联系管理员!");
-            } else {
-                respBean = RespBean.error("登录失败!");
-            }
-            resp.setStatus(401);
-            ObjectMapper om = new ObjectMapper();
-            PrintWriter out = resp.getWriter();
-            out.write(om.writeValueAsString(respBean));
-            out.flush();
-            out.close();
-        })
-        .successHandler((req, resp, auth) -> {
-        resp.setContentType("application/json;charset=utf-8");
-        RespBean respBean = RespBean.ok("登录成功!", HrUtils.getCurrentHr());
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                        o.setSecurityMetadataSource(metadataSource);
+                        o.setAccessDecisionManager(urlAccessDecisionManager);
+                        return o;
+                    }
+                })
+                .and()
+                .formLogin().loginPage("/login_p").loginProcessingUrl("/login")
+                .usernameParameter("username").passwordParameter("password")
+                .failureHandler((req, resp, e) -> {
+                    resp.setContentType("application/json;charset=utf-8");
+                    RespBean respBean = null;
+                    if (e instanceof BadCredentialsException ||
+                            e instanceof UsernameNotFoundException) {
+                        respBean = RespBean.error("账户名或者密码输入错误!");
+                    } else if (e instanceof LockedException) {
+                        respBean = RespBean.error("账户被锁定，请联系管理员!");
+                    } else if (e instanceof CredentialsExpiredException) {
+                        respBean = RespBean.error("密码过期，请联系管理员!");
+                    } else if (e instanceof AccountExpiredException) {
+                        respBean = RespBean.error("账户过期，请联系管理员!");
+                    } else if (e instanceof DisabledException) {
+                        respBean = RespBean.error("账户被禁用，请联系管理员!");
+                    } else {
+                        respBean = RespBean.error("登录失败!");
+                    }
+                    resp.setStatus(401);
+                    writerResponse(resp, respBean);
+                })
+                .successHandler((req, resp, auth) -> {
+                    resp.setContentType("application/json;charset=utf-8");
+                    RespBean respBean = RespBean.ok("登录成功!", HrUtils.getCurrentHr());
+                    writerResponse(resp, respBean);
+                })
+                .permitAll()
+                .and()
+                .logout().permitAll()
+                .and().csrf().disable()
+                .exceptionHandling().accessDeniedHandler(deniedHandler);
+    }
+
+    /**
+     * 返回响应结果
+     *
+     * @param resp  HttpServletResponse
+     * @param respBean RespBean
+     * @throws IOException IOException
+     */
+    private void writerResponse(HttpServletResponse resp, RespBean respBean) throws IOException {
         ObjectMapper om = new ObjectMapper();
         PrintWriter out = resp.getWriter();
         out.write(om.writeValueAsString(respBean));
         out.flush();
         out.close();
-        })
-        .permitAll()
-        .and()
-        .logout().permitAll()
-        .and().csrf().disable()
-        .exceptionHandling().accessDeniedHandler(deniedHandler);
     }
 }
