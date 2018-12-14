@@ -20,8 +20,12 @@ import java.util.List;
 @Transactional
 public class HrService implements UserDetailsService {
 
+    private final HrMapper hrMapper;
+
     @Autowired
-    HrMapper hrMapper;
+    public HrService(HrMapper hrMapper) {
+        this.hrMapper = hrMapper;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -33,7 +37,7 @@ public class HrService implements UserDetailsService {
     }
 
     public int hrReg(String username, String password) {
-        //如果用户名存在，返回错误
+        // 如果用户名存在，返回错误
         if (hrMapper.loadUserByUsername(username) != null) {
             return -1;
         }

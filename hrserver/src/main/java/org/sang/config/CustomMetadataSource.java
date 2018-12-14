@@ -15,20 +15,28 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/28.
+ *
+ * @author sang
+ * @date 2017/12/28
  */
 @Component
 public class CustomMetadataSource implements FilterInvocationSecurityMetadataSource {
+
+    private final MenuService menuService;
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+
     @Autowired
-    MenuService menuService;
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
+    public CustomMetadataSource(MenuService menuService) {
+        this.menuService = menuService;
+    }
+
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) {
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         List<Menu> allMenu = menuService.getAllMenu();
         for (Menu menu : allMenu) {
             if (antPathMatcher.match(menu.getUrl(), requestUrl)
-                    &&menu.getRoles().size()>0) {
+                    && menu.getRoles().size()>0) {
                 List<Role> roles = menu.getRoles();
                 int size = roles.size();
                 String[] values = new String[size];
@@ -38,7 +46,7 @@ public class CustomMetadataSource implements FilterInvocationSecurityMetadataSou
                 return SecurityConfig.createList(values);
             }
         }
-        //没有匹配上的资源，都是登录访问
+        // 没有匹配上的资源，都是登录访问
         return SecurityConfig.createList("ROLE_LOGIN");
     }
     @Override

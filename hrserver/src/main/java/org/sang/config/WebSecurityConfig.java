@@ -13,21 +13,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Created by sang on 2017/12/28.
+ *
+ * @author sang
+ * @date 2017/12/28
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -73,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username").passwordParameter("password")
                 .failureHandler((req, resp, e) -> {
                     resp.setContentType("application/json;charset=utf-8");
-                    RespBean respBean = null;
+                    RespBean respBean;
                     if (e instanceof BadCredentialsException ||
                             e instanceof UsernameNotFoundException) {
                         respBean = RespBean.error("账户名或者密码输入错误!");
@@ -89,16 +86,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         respBean = RespBean.error("登录失败!");
                     }
                     resp.setStatus(401);
-                    writerResponse(resp, respBean);
+                    writeResponse(resp, respBean);
                 })
                 .successHandler((req, resp, auth) -> {
                     resp.setContentType("application/json;charset=utf-8");
                     RespBean respBean = RespBean.ok("登录成功!", HrUtils.getCurrentHr());
-                    writerResponse(resp, respBean);
+                    writeResponse(resp, respBean);
                 })
                 .permitAll()
                 .and()
-                .logout().permitAll()
+                .logout().logoutSuccessUrl("/index.html")
+                .permitAll()
                 .and().csrf().disable()
                 .exceptionHandling().accessDeniedHandler(deniedHandler);
     }
@@ -110,7 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param respBean RespBean
      * @throws IOException IOException
      */
-    private void writerResponse(HttpServletResponse resp, RespBean respBean) throws IOException {
+    private void writeResponse(HttpServletResponse resp, RespBean respBean) throws IOException {
         ObjectMapper om = new ObjectMapper();
         PrintWriter out = resp.getWriter();
         out.write(om.writeValueAsString(respBean));

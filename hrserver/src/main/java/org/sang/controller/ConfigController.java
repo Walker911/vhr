@@ -13,12 +13,21 @@ import java.util.List;
 /**
  * 这是一个只要登录就能访问的Controller
  * 主要用来获取一些配置信息
+ *
+ * @author sang
+ * @date 2017/12/28
  */
 @RestController
 @RequestMapping("/config")
 public class ConfigController {
+
+    private final MenuService menuService;
+
     @Autowired
-    MenuService menuService;
+    public ConfigController(MenuService menuService) {
+        this.menuService = menuService;
+    }
+
     @RequestMapping("/sysmenu")
     public List<Menu> sysmenu() {
         return menuService.getMenusByHrId();

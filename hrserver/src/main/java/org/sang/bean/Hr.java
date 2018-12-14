@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/28.
+ *
+ * @author sang
+ * @date 2017/12/28
  */
 public class Hr implements UserDetails {
     private Long id;
@@ -121,7 +123,6 @@ public class Hr implements UserDetails {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
 
     public void setUsername(String username) {
         this.username = username;
