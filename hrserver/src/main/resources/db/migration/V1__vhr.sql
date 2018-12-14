@@ -13,6 +13,10 @@ File Encoding         : 65001
 Date: 2018-12-13 17:14:25
 */
 
+CREATE DATABASE IF NOT EXISTS `vhr` DEFAULT CHARACTER SET utf8;
+
+use `vhr`;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
