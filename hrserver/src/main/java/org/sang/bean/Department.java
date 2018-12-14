@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Created by sang on 2018/1/7.
+ *
+ * @author sang
+ * @date 2018/1/7
  */
 public class Department {
     private Long id;
@@ -25,12 +28,16 @@ public class Department {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Department that = (Department) o;
 
-        return name != null ? name.equals(that.name) : that.name == null;
+        return Objects.equals(name, that.name);
     }
 
     @Override
@@ -38,7 +45,10 @@ public class Department {
         return name != null ? name.hashCode() : 0;
     }
 
-    //存储过程执行结果
+    /**
+     * 存储过程执行结果
+     *
+     */
     private Integer result;
     private List<Department> children = new ArrayList<>();
 
