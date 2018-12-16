@@ -17,14 +17,22 @@ import java.util.List;
 /**
  * 处理通知消息的Controller
  * 登录即可访问
+ *
+ * @author sang
+ * @date 2017/12/8
  */
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
+
+    private final HrService hrService;
+    private final SysMsgService sysMsgService;
+
     @Autowired
-    HrService hrService;
-    @Autowired
-    SysMsgService sysMsgService;
+    public ChatController(HrService hrService, SysMsgService sysMsgService) {
+        this.hrService = hrService;
+        this.sysMsgService = sysMsgService;
+    }
 
     @RequestMapping(value = "/hrs", method = RequestMethod.GET)
     public List<Hr> getAllHr() {
@@ -44,6 +52,12 @@ public class ChatController {
         return sysMsgService.getSysMsgByPage(page, size);
     }
 
+    /**
+     * 消息标记未已读
+     *
+     * @param flag -1 全部标记为已读
+     * @return result
+     */
     @RequestMapping(value = "/markread", method = RequestMethod.PUT)
     public RespBean markRead(Long flag) {
         if (sysMsgService.markRead(flag)) {

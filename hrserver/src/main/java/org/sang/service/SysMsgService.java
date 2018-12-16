@@ -13,17 +13,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Created by sang on 2018/2/2.
+ * @author sang
+ * @date 2018/2/2
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SysMsgService {
-    @Autowired
-    SysMsgMapper sysMsgMapper;
-    @Autowired
-    HrService hrService;
+    private final SysMsgMapper sysMsgMapper;
+    private final HrService hrService;
 
-    @PreAuthorize("hasRole('ROLE_admin')")//只有管理员可以发送系统消息
+    @Autowired
+    public SysMsgService(SysMsgMapper sysMsgMapper, HrService hrService) {
+        this.sysMsgMapper = sysMsgMapper;
+        this.hrService = hrService;
+    }
+
+    /**
+     * 只有管理员可以发送系统消息
+     *
+     * @param msg 消息相关
+     * @return true/false
+     */
+    @PreAuthorize("hasRole('ROLE_admin')")
     public boolean sendMsg(MsgContent msg) {
         int result = sysMsgMapper.sendMsg(msg);
         List<Hr> allHr = hrService.getAllHr();
@@ -36,6 +47,12 @@ public class SysMsgService {
         return sysMsgMapper.getSysMsg(start,size, HrUtils.getCurrentHr().getId());
     }
 
+    /**
+     * 消息标记为已读
+     *
+     * @param flag -1：全部消息标记为已读
+     * @return true/false
+     */
     public boolean markRead(Long flag) {
         if (flag != -1) {
             return sysMsgMapper.markRead(flag,HrUtils.getCurrentHr().getId())==1;

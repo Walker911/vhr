@@ -27,20 +27,24 @@ import java.util.concurrent.ExecutorService;
 @RestController
 @RequestMapping("/employee/basic")
 public class EmpBasicController {
+    private final EmpService empService;
+    private final DepartmentService departmentService;
+    private final PositionService positionService;
+    private final JobLevelService jobLevelService;
+    private final ExecutorService executorService;
+    private final TemplateEngine templateEngine;
+    private final JavaMailSender javaMailSender;
+
     @Autowired
-    EmpService empService;
-    @Autowired
-    DepartmentService departmentService;
-    @Autowired
-    PositionService positionService;
-    @Autowired
-    JobLevelService jobLevelService;
-    @Autowired
-    ExecutorService executorService;
-    @Autowired
-    TemplateEngine templateEngine;
-    @Autowired
-    JavaMailSender javaMailSender;
+    public EmpBasicController(EmpService empService, DepartmentService departmentService, PositionService positionService, JobLevelService jobLevelService, ExecutorService executorService, TemplateEngine templateEngine, JavaMailSender javaMailSender) {
+        this.empService = empService;
+        this.departmentService = departmentService;
+        this.positionService = positionService;
+        this.jobLevelService = jobLevelService;
+        this.executorService = executorService;
+        this.templateEngine = templateEngine;
+        this.javaMailSender = javaMailSender;
+    }
 
     @RequestMapping(value = "/basicdata", method = RequestMethod.GET)
     public Map<String, Object> getAllNations() {
@@ -101,10 +105,10 @@ public class EmpBasicController {
             Long departmentId, String beginDateScope) {
         Map<String, Object> map = new HashMap<>();
         List<Employee> employeeByPage = empService.getEmployeeByPage(page, size,
-                keywords,politicId, nationId, posId, jobLevelId, engageForm,
+                keywords, politicId, nationId, posId, jobLevelId, engageForm,
                 departmentId, beginDateScope);
         Long count = empService.getCountByKeywords(keywords, politicId, nationId,
-                posId,jobLevelId, engageForm, departmentId, beginDateScope);
+                posId, jobLevelId, engageForm, departmentId, beginDateScope);
         map.put("emps", employeeByPage);
         map.put("count", count);
         return map;
