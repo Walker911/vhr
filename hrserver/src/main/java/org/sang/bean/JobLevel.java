@@ -1,9 +1,11 @@
 package org.sang.bean;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
- * Created by sang on 2018/1/11.
+ * @author sang
+ * @date 2018/1/11
  */
 public class JobLevel {
     private Long id;
@@ -13,12 +15,16 @@ public class JobLevel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         JobLevel jobLevel = (JobLevel) o;
 
-        return name != null ? name.equals(jobLevel.name) : jobLevel.name == null;
+        return Objects.equals(name, jobLevel.name);
     }
 
     @Override

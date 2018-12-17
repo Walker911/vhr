@@ -5,7 +5,8 @@ import org.sang.bean.Menu;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/28.
+ * @author sang
+ * @date 2018/1/26
  */
 public interface MenuMapper {
     List<Menu> getAllMenu();

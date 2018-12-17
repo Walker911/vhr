@@ -6,18 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by sang on 2018/1/7.
+ * @author sang
+ * @date 2018/1/26
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class DepartmentService {
+
+    private final DepartmentMapper departmentMapper;
+
     @Autowired
-    DepartmentMapper departmentMapper;
+    public DepartmentService(DepartmentMapper departmentMapper) {
+        this.departmentMapper = departmentMapper;
+    }
+
     public int addDep(Department department) {
         department.setEnabled(true);
         departmentMapper.addDep(department);

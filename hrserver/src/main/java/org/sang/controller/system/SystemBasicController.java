@@ -3,17 +3,15 @@ package org.sang.controller.system;
 import org.sang.bean.*;
 import org.sang.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sang on 2017/12/29.
+ * @author sang
+ * @date 2018/1/26
  */
 @RestController
 @RequestMapping("/system/basic")
@@ -88,7 +86,7 @@ public class SystemBasicController {
         return map;
     }
 
-    @RequestMapping(value = "/dep/{did}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/dep/{did}")
     public RespBean deleteDep(@PathVariable Long did) {
         if (departmentService.deleteDep(did) == 1) {
             return RespBean.ok("删除成功!");
@@ -96,17 +94,17 @@ public class SystemBasicController {
         return RespBean.error("删除失败!");
     }
 
-    @RequestMapping(value = "/dep/{pid}", method = RequestMethod.GET)
+    @GetMapping(value = "/dep/{pid}")
     public List<Department> getDepByPid(@PathVariable Long pid) {
         return departmentService.getDepByPid(pid);
     }
 
-    @RequestMapping(value = "/deps", method = RequestMethod.GET)
+    @GetMapping(value = "/deps")
     public List<Department> getAllDeps() {
         return departmentService.getAllDeps();
     }
 
-    @RequestMapping(value = "/position", method = RequestMethod.POST)
+    @PostMapping(value = "/position")
     public RespBean addPos(Position pos) {
         int result = positionService.addPos(pos);
         if (result == 1) {
@@ -117,7 +115,7 @@ public class SystemBasicController {
         return RespBean.error("添加失败!");
     }
 
-    @RequestMapping(value = "/positions", method = RequestMethod.GET)
+    @GetMapping(value = "/positions")
     public List<Position> getAllPos() {
         return positionService.getAllPos();
     }
@@ -130,7 +128,7 @@ public class SystemBasicController {
         return RespBean.error("删除失败!");
     }
 
-    @RequestMapping(value = "/position", method = RequestMethod.PUT)
+    @PutMapping(value = "/position")
     public RespBean updatePosById(Position position) {
         if (positionService.updatePosById(position) == 1) {
             return RespBean.ok("修改成功!");
@@ -138,7 +136,7 @@ public class SystemBasicController {
         return RespBean.error("修改失败!");
     }
 
-    @RequestMapping(value = "/joblevel", method = RequestMethod.POST)
+    @PostMapping(value = "/joblevel")
     public RespBean addJobLevel(JobLevel jobLevel) {
         int result = jobLevelService.addJobLevel(jobLevel);
         if (result == 1) {
@@ -149,12 +147,12 @@ public class SystemBasicController {
         return RespBean.error("添加失败!");
     }
 
-    @RequestMapping(value = "/joblevels", method = RequestMethod.GET)
+    @GetMapping(value = "/joblevels")
     public List<JobLevel> getAllJobLevels() {
         return jobLevelService.getAllJobLevels();
     }
 
-    @RequestMapping(value = "/joblevel/{ids}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/joblevel/{ids}")
     public RespBean deleteJobLevelById(@PathVariable String ids) {
         if (jobLevelService.deleteJobLevelById(ids)) {
             return RespBean.ok("删除成功!");
@@ -162,7 +160,7 @@ public class SystemBasicController {
         return RespBean.error("删除失败!");
     }
 
-    @RequestMapping(value = "/joblevel", method = RequestMethod.PUT)
+    @PutMapping(value = "/joblevel")
     public RespBean updateJobLevel(JobLevel jobLevel) {
         if (jobLevelService.updateJobLevel(jobLevel) == 1) {
             return RespBean.ok("修改成功!");

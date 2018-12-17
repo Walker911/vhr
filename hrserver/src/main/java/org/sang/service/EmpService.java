@@ -15,17 +15,23 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by sang on 2018/1/12.
+ * @author sang
+ * @date 2018/1/12
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class EmpService {
+    private final EmpMapper empMapper;
+
+    private SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    private SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    private SimpleDateFormat birthdayFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private DecimalFormat decimalFormat = new DecimalFormat("##.00");
+
     @Autowired
-    EmpMapper empMapper;
-    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-    SimpleDateFormat birthdayFormat = new SimpleDateFormat("yyyy-MM-dd");
-    DecimalFormat decimalFormat = new DecimalFormat("##.00");
+    public EmpService(EmpMapper empMapper) {
+        this.empMapper = empMapper;
+    }
 
     public List<Nation> getAllNations() {
         return empMapper.getAllNations();
@@ -43,6 +49,11 @@ public class EmpService {
         return empMapper.addEmp(employee);
     }
 
+    /**
+     * 获取最大工号
+     *
+     * @return 工号
+     */
     public Long getMaxWorkID() {
         Long maxWorkID = empMapper.getMaxWorkID();
         return maxWorkID == null ? 0 : maxWorkID;
@@ -77,6 +88,12 @@ public class EmpService {
         return empMapper.getCountByKeywords(keywords, politicId, nationId, posId, jobLevelId, engageForm, departmentId, startBeginDate, endBeginDate);
     }
 
+    /**
+     * 修改员工信息
+     *
+     * @param employee 员工信息
+     * @return 0/1
+     */
     public int updateEmp(Employee employee) {
         Date beginContract = employee.getBeginContract();
         Date endContract = employee.getEndContract();

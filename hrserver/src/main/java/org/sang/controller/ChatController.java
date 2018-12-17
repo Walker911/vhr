@@ -7,10 +7,7 @@ import org.sang.bean.SysMsg;
 import org.sang.service.HrService;
 import org.sang.service.SysMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,12 +31,12 @@ public class ChatController {
         this.sysMsgService = sysMsgService;
     }
 
-    @RequestMapping(value = "/hrs", method = RequestMethod.GET)
+    @GetMapping(value = "/hrs")
     public List<Hr> getAllHr() {
         return hrService.getAllHrExceptAdmin();
     }
 
-    @RequestMapping(value = "/nf", method = RequestMethod.POST)
+    @PostMapping(value = "/nf")
     public RespBean sendNf(MsgContent msg) {
         if (sysMsgService.sendMsg(msg)) {
             return RespBean.ok("发送成功!");
@@ -53,7 +50,7 @@ public class ChatController {
     }
 
     /**
-     * 消息标记未已读
+     * 消息标记为已读
      *
      * @param flag -1 全部标记为已读
      * @return result

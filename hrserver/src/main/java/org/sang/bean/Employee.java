@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
+/**
+ * 员工
+ *
+ * @author walker
+ * @date 2018/12/17
+ */
 public class Employee {
     private Long id;
     private String name;

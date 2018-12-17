@@ -96,7 +96,7 @@
     <select id="getAllHr" resultType="org.sang.bean.Hr">
         select * from hr
         <if test="currentId!=null">
-            WHERE id !=#{currentId}
+            WHERE id != #{currentId}
         </if>
     </select>
 </mapper>

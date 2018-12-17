@@ -1,6 +1,5 @@
 package org.sang.service;
 
-import org.sang.bean.JobLevel;
 import org.sang.bean.Position;
 import org.sang.mapper.PositionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Created by sang on 2018/1/10.
+ * @author sang
+ * @date 2018/1/10
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class PositionService {
+
+    private final PositionMapper positionMapper;
+
     @Autowired
-    PositionMapper positionMapper;
+    public PositionService(PositionMapper positionMapper) {
+        this.positionMapper = positionMapper;
+    }
 
     public int addPos(Position pos) {
         if (positionMapper.getPosByName(pos.getName()) != null) {
@@ -25,6 +30,11 @@ public class PositionService {
         return positionMapper.addPos(pos);
     }
 
+    /**
+     * 获取所有有效职位
+     *
+     * @return 职位列表
+     */
     public List<Position> getAllPos() {
         return positionMapper.getAllPos();
     }

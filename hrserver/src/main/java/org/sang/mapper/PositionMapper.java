@@ -6,7 +6,8 @@ import org.sang.bean.Position;
 import java.util.List;
 
 /**
- * Created by sang on 2018/1/10.
+ * @author sang
+ * @date 2018/1/10
  */
 public interface PositionMapper {
 
@@ -14,6 +15,11 @@ public interface PositionMapper {
 
     Position getPosByName(String name);
 
+    /**
+     * 获取所有有效职位
+     *
+     * @return 职位列表
+     */
     List<Position> getAllPos();
 
     int deletePosById(@Param("pids") String[] pids);

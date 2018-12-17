@@ -1,7 +1,8 @@
 package org.sang.mapper;
 
 /**
- * Created by sang on 2017/12/29.
+ * @author sang
+ * @date 2018/1/26
  */
 public interface SystemMapper {
 

@@ -1,7 +1,8 @@
 package org.sang.bean;
 
 /**
- * Created by sang on 2018/2/2.
+ * @author sang
+ * @date 2018/1/26
  */
 public class SysMsg {
     private Long id;

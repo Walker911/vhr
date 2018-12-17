@@ -3,7 +3,8 @@ package org.sang.bean;
 import java.sql.Timestamp;
 
 /**
- * Created by sang on 2018/1/10.
+ * @author sang
+ * @date 2018/1/26
  */
 public class Position {
     private Long id;

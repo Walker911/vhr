@@ -887,11 +887,12 @@
         this.emp.departmentName = row.department.name;
         this.emp.jobLevelId = row.jobLevel.id;
         this.emp.posId = row.position.id;
-//        delete this.emp.department;
-//        delete this.emp.jobLevel;
-//        delete this.emp.position;
-//        delete this.emp.nation;
-//        delete this.emp.politicsStatus;
+        delete this.emp.department;
+        delete this.emp.jobLevel;
+        delete this.emp.position;
+        delete this.emp.nation;
+        delete this.emp.politicsStatus;
+        delete this.emp.salary;
         delete this.emp.workAge;
         delete this.emp.notWorkDate;
         this.dialogVisible = true;

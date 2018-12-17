@@ -11,12 +11,18 @@ import java.security.Principal;
 
 /**
  * WebSocket 消息处理类
- * Created by sang on 2018/1/27.
+ * @author sang
+ * @date 2018/1/27
  */
 @Controller
 public class WsController {
+
+    private final SimpMessagingTemplate messagingTemplate;
+
     @Autowired
-    SimpMessagingTemplate messagingTemplate;
+    public WsController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @MessageMapping("/ws/chat")
     public void handleChat(Principal principal, String msg) {

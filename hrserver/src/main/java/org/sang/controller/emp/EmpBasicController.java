@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Created by sang on 2018/1/12.
+ *
+ * @author sang
+ * @date 2018/1/12
  */
 @RestController
 @RequestMapping("/employee/basic")
@@ -46,9 +48,9 @@ public class EmpBasicController {
         this.javaMailSender = javaMailSender;
     }
 
-    @RequestMapping(value = "/basicdata", method = RequestMethod.GET)
+    @GetMapping(value = "/basicdata")
     public Map<String, Object> getAllNations() {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
         map.put("nations", empService.getAllNations());
         map.put("politics", empService.getAllPolitics());
         map.put("deps", departmentService.getDepByPid(-1L));
@@ -58,17 +60,17 @@ public class EmpBasicController {
         return map;
     }
 
-    @RequestMapping("/maxWorkID")
+    @GetMapping("/maxWorkID")
     public String maxWorkID() {
         return String.format("%08d", empService.getMaxWorkID() + 1);
     }
 
-    @RequestMapping(value = "/emp", method = RequestMethod.POST)
+    @PostMapping(value = "/emp")
     public RespBean addEmp(Employee employee) {
         if (empService.addEmp(employee) == 1) {
             List<Position> allPos = positionService.getAllPos();
             for (Position allPo : allPos) {
-                if (allPo.getId() == employee.getPosId()) {
+                if (allPo.getId().equals(employee.getPosId())) {
                     employee.setPosName(allPo.getName());
                 }
             }
@@ -79,7 +81,7 @@ public class EmpBasicController {
         return RespBean.error("添加失败!");
     }
 
-    @RequestMapping(value = "/emp", method = RequestMethod.PUT)
+    @PutMapping(value = "/emp")
     public RespBean updateEmp(Employee employee) {
         if (empService.updateEmp(employee) == 1) {
             return RespBean.ok("更新成功!");
@@ -87,7 +89,7 @@ public class EmpBasicController {
         return RespBean.error("更新失败!");
     }
 
-    @RequestMapping(value = "/emp/{ids}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/emp/{ids}")
     public RespBean deleteEmpById(@PathVariable String ids) {
         if (empService.deleteEmpById(ids)) {
             return RespBean.ok("删除成功!");
@@ -95,7 +97,7 @@ public class EmpBasicController {
         return RespBean.error("删除失败!");
     }
 
-    @RequestMapping(value = "/emp", method = RequestMethod.GET)
+    @GetMapping(value = "/emp")
     public Map<String, Object> getEmployeeByPage(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
@@ -114,12 +116,12 @@ public class EmpBasicController {
         return map;
     }
 
-    @RequestMapping(value = "/exportEmp", method = RequestMethod.GET)
+    @GetMapping(value = "/exportEmp")
     public ResponseEntity<byte[]> exportEmp() {
         return PoiUtils.exportEmp2Excel(empService.getAllEmployees());
     }
 
-    @RequestMapping(value = "/importEmp", method = RequestMethod.POST)
+    @PostMapping(value = "/importEmp")
     public RespBean importEmp(MultipartFile file) {
         List<Employee> emps = PoiUtils.importEmp2List(file,
                 empService.getAllNations(), empService.getAllPolitics(),

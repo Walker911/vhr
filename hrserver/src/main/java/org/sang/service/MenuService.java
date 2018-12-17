@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2017/12/28
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @CacheConfig(cacheNames = "menus_cache")
 public class MenuService {
 
