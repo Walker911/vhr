@@ -31,6 +31,11 @@ public class WsController {
         messagingTemplate.convertAndSendToUser(destUser, "/queue/chat", new ChatResp(message, principal.getName()));
     }
 
+    /**
+     * SendTo: 如果服务器接收到了消息，就会对订阅了 @SendTo 括号中的地址发送消息
+     *
+     * @return
+     */
     @MessageMapping("/ws/nf")
     @SendTo("/topic/nf")
     public String handleNF() {
