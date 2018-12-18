@@ -19,7 +19,7 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse response, Object o, Exception e) {
         ModelAndView mv = new ModelAndView(new MappingJackson2JsonView());
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
         map.put("status", 500);
         map.put("msg", "操作失败!");
         mv.addAllObjects(map);
