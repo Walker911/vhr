@@ -1,13 +1,13 @@
 package org.sang.config;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.sang.common.DateConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author sang
@@ -22,6 +22,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public ExecutorService executorService() {
-        return Executors.newCachedThreadPool();
+        // guava
+        ThreadFactory factory = new ThreadFactoryBuilder()
+                .setNameFormat("demo-pool-%d").build();
+        // 自定义线程池
+        return new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingDeque<>(1024), factory, new ThreadPoolExecutor.AbortPolicy());
     }
 }

@@ -2,6 +2,7 @@ package org.sang.config;
 
 import org.sang.bean.RespBean;
 import org.sang.common.HrUtils;
+import org.sang.handler.AuthenticationAccessDeniedHandler;
 import org.sang.handler.FailureHandler;
 import org.sang.service.HrService;
 import org.sang.util.ResponseUtil;
