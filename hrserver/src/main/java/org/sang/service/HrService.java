@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2018/1/26
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class HrService implements UserDetailsService {
 
     private final HrMapper hrMapper;
