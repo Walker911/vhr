@@ -4,6 +4,7 @@ import org.sang.bean.RespBean;
 import org.sang.common.HrUtils;
 import org.sang.handler.AuthenticationAccessDeniedHandler;
 import org.sang.handler.FailureHandler;
+import org.sang.handler.LogoutHandlerImpl;
 import org.sang.service.HrService;
 import org.sang.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UrlAccessDecisionManager urlAccessDecisionManager;
     private final AuthenticationAccessDeniedHandler deniedHandler;
     private final FailureHandler failureHandler;
+    private final LogoutHandlerImpl logoutHandler;
 
     @Autowired
     public WebSecurityConfig(HrService hrService, CustomMetadataSource metadataSource,
                              UrlAccessDecisionManager urlAccessDecisionManager,
-                             AuthenticationAccessDeniedHandler deniedHandler, FailureHandler failureHandler) {
+                             AuthenticationAccessDeniedHandler deniedHandler,
+                             FailureHandler failureHandler, LogoutHandlerImpl logoutHandler) {
         this.hrService = hrService;
         this.metadataSource = metadataSource;
         this.urlAccessDecisionManager = urlAccessDecisionManager;
         this.deniedHandler = deniedHandler;
         this.failureHandler = failureHandler;
+        this.logoutHandler = logoutHandler;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/index.html", "/static/**", "/login_p");
+        web.ignoring().antMatchers("/index.html", "/static/**", "/login_p", "/favicon.ico");
     }
 
     @Override
@@ -77,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/index.html")
+                .logout().logoutUrl("/logout")
+                .logoutSuccessHandler(logoutHandler)
                 .permitAll()
                 .and().csrf().disable()
                 .exceptionHandling().accessDeniedHandler(deniedHandler);
