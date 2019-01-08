@@ -5,12 +5,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
+/**
+ * @author sang
+ */
 @EnableCaching
 @SpringBootApplication
 @MapperScan("org.sang.mapper")
-public class HrserverApplication {
+public class HrServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HrserverApplication.class, args);
+        SpringApplication.run(HrServerApplication.class, args);
     }
 }
