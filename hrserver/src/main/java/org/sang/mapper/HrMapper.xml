@@ -17,7 +17,7 @@
     </resultMap>
     <resultMap id="lazyLoadRoles" type="org.sang.bean.Hr" extends="BaseResultMap">
         <collection property="roles" ofType="org.sang.bean.Role" select="org.sang.mapper.HrMapper.getRolesByHrId"
-                    column="id"></collection>
+                    column="id" />
     </resultMap>
     <resultMap id="eagerLoadRoles" type="org.sang.bean.Hr" extends="BaseResultMap">
         <collection property="roles" ofType="org.sang.bean.Role">

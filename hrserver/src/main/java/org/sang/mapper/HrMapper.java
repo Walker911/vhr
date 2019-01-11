@@ -11,8 +11,20 @@ import java.util.List;
  * @date 2018/1/26
  */
 public interface HrMapper {
+    /**
+     * 根据 username 获取用户信息
+     *
+     * @param username
+     * @return
+     */
     Hr loadUserByUsername(String username);
 
+    /**
+     * 根据 id 获取角色信息
+     *
+     * @param id
+     * @return
+     */
     List<Role> getRolesByHrId(Long id);
 
     int hrReg(@Param("username") String username, @Param("password") String password);
@@ -25,6 +37,12 @@ public interface HrMapper {
 
     int addRolesForHr(@Param("hrId") Long hrId, @Param("rids") Long[] rids);
 
+    /**
+     * 根据 id 获取用户信息
+     *
+     * @param hrId
+     * @return
+     */
     Hr getHrById(Long hrId);
 
     int deleteHr(Long hrId);

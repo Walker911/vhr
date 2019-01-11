@@ -4,10 +4,7 @@ import org.sang.bean.Hr;
 import org.sang.bean.RespBean;
 import org.sang.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,12 +23,12 @@ public class SystemHrController {
         this.hrService = hrService;
     }
 
-    @RequestMapping("/id/{hrId}")
+    @GetMapping("/id/{hrId}")
     public Hr getHrById(@PathVariable Long hrId) {
         return hrService.getHrById(hrId);
     }
 
-    @RequestMapping(value = "/{hrId}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{hrId}")
     public RespBean deleteHr(@PathVariable Long hrId) {
         if (hrService.deleteHr(hrId) == 1) {
             return RespBean.ok("删除成功!");
@@ -39,7 +36,7 @@ public class SystemHrController {
         return RespBean.error("删除失败!");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @PutMapping(value = "/")
     public RespBean updateHr(Hr hr) {
         if (hrService.updateHr(hr) == 1) {
             return RespBean.ok("更新成功!");
@@ -47,7 +44,7 @@ public class SystemHrController {
         return RespBean.error("更新失败!");
     }
 
-    @RequestMapping(value = "/roles", method = RequestMethod.PUT)
+    @PutMapping(value = "/roles")
     public RespBean updateHrRoles(Long hrId, Long[] rids) {
         if (hrService.updateHrRoles(hrId, rids) == rids.length) {
             return RespBean.ok("更新成功!");
@@ -61,8 +58,7 @@ public class SystemHrController {
         return hrs;
     }
 
-
-    @RequestMapping(value = "/hr/reg", method = RequestMethod.POST)
+    @PostMapping(value = "/hr/reg")
     public RespBean hrReg(String username, String password) {
         int i = hrService.hrReg(username, password);
         if (i == 1) {
