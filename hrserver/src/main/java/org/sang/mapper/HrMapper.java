@@ -29,8 +29,20 @@ public interface HrMapper {
 
     int hrReg(@Param("username") String username, @Param("password") String password);
 
+    /**
+     * 根据关键字获取 HR
+     *
+     * @param keywords
+     * @return
+     */
     List<Hr> getHrsByKeywords(@Param("keywords") String keywords);
 
+    /**
+     * 更新 HR
+     *
+     * @param hr
+     * @return
+     */
     int updateHr(Hr hr);
 
     int deleteRoleByHrId(Long hrId);
