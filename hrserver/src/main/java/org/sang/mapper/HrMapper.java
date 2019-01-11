@@ -27,6 +27,13 @@ public interface HrMapper {
      */
     List<Role> getRolesByHrId(Long id);
 
+    /**
+     * 添加 HR
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     int hrReg(@Param("username") String username, @Param("password") String password);
 
     /**
