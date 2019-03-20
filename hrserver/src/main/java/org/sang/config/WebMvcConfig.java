@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public ExecutorService executorService() {
         // guava
         ThreadFactory factory = new ThreadFactoryBuilder()
-                .setNameFormat("demo-pool-%d").build();
+                .setNameFormat("email-pool-%d").build();
         // 自定义线程池
         return new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingDeque<>(1024), factory, new ThreadPoolExecutor.AbortPolicy());
